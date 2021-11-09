@@ -10,7 +10,7 @@ import com.example.marvelapp.model.common.type.Price
 import com.example.marvelapp.model.common.type.MarvelURL
 
 
-data class Comics(
+data class Comic(
     @SerializedName("id") val id: Int,
     @SerializedName("digitalId") val digitalId: Int,
     @SerializedName("title") val title: String,

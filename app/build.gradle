@@ -7,7 +7,7 @@ def localProperties = new Properties()
 localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
-    compileSdk 30
+    compileSdk 31
 
     defaultConfig {
         configurations.all {
@@ -15,7 +15,7 @@ android {
         }
         applicationId "com.example.marvelapp"
         minSdk 26
-        targetSdk 30
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 

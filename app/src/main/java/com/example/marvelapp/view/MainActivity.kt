@@ -16,6 +16,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         this.findViewById<BottomNavigationView>(R.id.bottom_nav_bar).itemIconTintList = null
 
-        supportFragmentManager.beginTransaction().add(R.id.fragmentContainerView, ComicsFragment())
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainerView, ComicsFragment()).commit()
     }
 }

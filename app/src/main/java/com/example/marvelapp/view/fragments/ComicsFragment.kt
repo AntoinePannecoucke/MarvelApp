@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvelapp.R
-import com.example.marvelapp.model.comics.Comics
 import com.example.marvelapp.view.adapters.ComicsAdapter
 import com.example.marvelapp.viewmodel.ComicsViewModel
 
@@ -34,6 +33,7 @@ class ComicsFragment : Fragment() {
         vm.getComics().observe(viewLifecycleOwner, { data ->
             recycler_view.adapter = context?.let { data?.let { list -> ComicsAdapter(vm, list, it) } }
         })
+        vm.getComics()
     }
 
 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.marvelapp.logic.network.calls.get.GetAllComics
-import com.example.marvelapp.model.comics.Comics
+import com.example.marvelapp.model.comics.Comic
 import com.example.marvelapp.model.common.ApiResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -19,12 +19,12 @@ class ComicsViewModel : ViewModel() {
 
 
 
-    fun getComics() : MutableLiveData<List<Comics>?>{
-        var comics = MutableLiveData<List<Comics>?>()
+    fun getComics() : MutableLiveData<List<Comic>?>{
+        var comics = MutableLiveData<List<Comic>?>()
         viewModelScope.launch {
-            val jsonResponse = Gson().fromJson<ApiResponse<Comics>>(
+            val jsonResponse = Gson().fromJson<ApiResponse<Comic>>(
                 Gson().toJson(GetAllComics().execute().getOrNull()),
-                object : TypeToken<ApiResponse<Comics>>() {}.type
+                object : TypeToken<ApiResponse<Comic>>() {}.type
             )
             Log.d("Main", "$jsonResponse")
             comics.postValue(jsonResponse.data.results)
