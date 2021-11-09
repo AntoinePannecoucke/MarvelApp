@@ -1,14 +1,14 @@
 package com.example.marvelapp.logic.network
 
 import com.example.marvelapp.logic.manager.ResourcesManager
-import com.example.marvelapp.usecase.md5.GetMD5UseCase
+import com.example.marvelapp.logic.md5.HashMD5
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.time.LocalDateTime
 
 
-class ApiInterceptorMarvel : Interceptor {
+class AutoLoginInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
@@ -16,7 +16,7 @@ class ApiInterceptorMarvel : Interceptor {
         val timestamp = LocalDateTime.now().toString()
 
         val hash =
-            runBlocking { GetMD5UseCase(timestamp + ResourcesManager.privateKey + ResourcesManager.publicKey).execute() }
+            runBlocking { HashMD5(timestamp + ResourcesManager.privateKey + ResourcesManager.publicKey).execute() }
 
         requestBuilder.url(
             chain.request().url.newBuilder()

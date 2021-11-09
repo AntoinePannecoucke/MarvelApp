@@ -7,12 +7,12 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ApiServiceMarvel {
+interface RetrofitInterface {
 
     //Comics
     @GET("/v1/public/comics/{id}")
     suspend fun getComics(
-        @Path("id") id: String,
+        @Path("id") id: Int,
     ): Response<ApiResponse<Comics>>
 
     @GET("/v1/public/comics")
