@@ -11,7 +11,7 @@ interface RetrofitInterface {
 
     //Comics
     @GET("/v1/public/comics/{id}")
-    suspend fun getComics(
+    suspend fun getComic(
         @Path("id") id: Int,
     ): Response<ApiResponse<Comics>>
 
@@ -20,7 +20,7 @@ interface RetrofitInterface {
 
 
     @GET("/v1/public/comics")
-    suspend fun getComicsByName(
+    suspend fun getComicByName(
         @Query("titleStartsWith") titleStartsWith: String,
     ): Response<ApiResponse<Comics>>
 

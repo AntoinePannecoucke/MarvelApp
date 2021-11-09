@@ -5,11 +5,11 @@ import com.example.marvelapp.logic.network.calls.Call
 import com.example.marvelapp.model.comics.Comics
 import com.example.marvelapp.model.common.ApiResponse
 
-class GetComics(private val id: Int) : Call<ApiResponse<Comics>?> {
+class GetAllComics : Call<ApiResponse<Comics>?> {
 
     override suspend fun execute(): Result<ApiResponse<Comics>?> {
         return try {
-            val response = RetrofitClient.RETROFIT_INTERFACE.getComics(id)
+            val response = RetrofitClient.RETROFIT_INTERFACE.getAllComics()
 
             if (response.isSuccessful && response.body() != null) {
                 return Result.success(response.body())
