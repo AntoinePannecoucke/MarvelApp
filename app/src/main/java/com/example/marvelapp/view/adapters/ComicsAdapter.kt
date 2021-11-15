@@ -39,16 +39,20 @@ class ComicsAdapter(val viewModel: ComicsViewModel, val arrayList: List<Comic>, 
 
         var name : TextView = binding.findViewById(R.id.comic_name)
         var thumbnail : ImageView = binding.findViewById(R.id.comic_image)
+        var description : TextView = binding.findViewById(R.id.comic_description)
+        var pagesCount : TextView = binding.findViewById(R.id.comic_pages_count)
 
         fun bind(comic: Comic){
             name.text = comic.title
+            description.text = comic.getSmallDesc()
+            pagesCount.text = "${comic.pageCount} pages"
 
             val builder = Picasso.Builder(context)
             builder.downloader(OkHttp3Downloader(context))
 
             builder.build().load("${comic.thumbnail.path}.${comic.thumbnail.extension}")
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
+                .placeholder(R.drawable.ic_image_placeholder)
+                .error(R.drawable.ic_image_error)
                 .into(thumbnail)
         }
 

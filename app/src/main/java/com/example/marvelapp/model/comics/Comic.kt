@@ -40,4 +40,11 @@ data class Comic(
     @SerializedName("characters") val characters: ListSamples,
     @SerializedName("stories") val stories: ListSamples,
     @SerializedName("events") val events: ListSamples
-)
+){
+    fun getSmallDesc() : String {
+        if (description != null){
+            return if (description.length > 100)  "${description.substring( 0, 100)}..." else description
+        }
+        return ""
+    }
+}
