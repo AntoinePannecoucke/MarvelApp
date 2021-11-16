@@ -2,13 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/comic_nav_btn"
         android:icon="@drawable/ic_comic"
         android:title="@string/comics_menu" />
     <item
+        android:id="@+id/favorite_nav_btn"
         android:icon="@drawable/ic_favorite"
         android:iconTint="@color/gold"
         android:title="@string/fav_menu" />
     <item
+        android:id="@+id/search_nav_btn"
         android:icon="@drawable/ic_search"
         android:iconTint="@color/gold"
         android:title="@string/search_menu" />

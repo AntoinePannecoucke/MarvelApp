@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.marvelapp.model.comics.Comic
 import com.google.gson.Gson
+import java.util.ArrayList
 
 class SharedPreferencesManager(val context: Context) {
-    //TODO faire un companion object pour récuperer la même instance partout
     private val FAV_COMICS = "favorite_comics"
-    val sharedPref: SharedPreferences = context.getSharedPreferences(FAV_COMICS, Context.MODE_PRIVATE)
+    private val sharedPref: SharedPreferences = context.getSharedPreferences(FAV_COMICS, Context.MODE_PRIVATE)
 
     fun save(comicId: String, value: Comic) {
         val editor: SharedPreferences.Editor = sharedPref.edit()
@@ -21,6 +21,28 @@ class SharedPreferencesManager(val context: Context) {
             return Gson().fromJson(it, Comic::class.java)
         }
         return null
+    }
+
+    fun isFav(comicId: String) : Boolean {
+        return getValue(comicId) != null
+    }
+
+    fun remove(comicId: String) {
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+        if (isFav(comicId)) {
+            editor.remove(comicId)
+            editor.apply()
+        }
+    }
+
+    fun getAll() : List<Comic>{
+        var list = sharedPref.all.values
+        var comics = ArrayList<Comic>()
+        list.forEach {
+            val tmp : String = it.toString()
+            comics.add(Gson().fromJson(tmp, Comic::class.java))
+        }
+        return comics
     }
 
     companion object {

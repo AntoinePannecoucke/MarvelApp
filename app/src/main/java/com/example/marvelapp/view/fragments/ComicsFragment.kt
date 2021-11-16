@@ -31,7 +31,7 @@ class ComicsFragment : Fragment() {
             this.layoutManager = LinearLayoutManager(activity)
         }
         vm.getComics().observe(viewLifecycleOwner, { data ->
-            recycler_view.adapter = context?.let { data?.let { list -> ComicsAdapter(vm, list, it) } }
+            recycler_view.adapter = context?.let { data?.let { list -> ComicsAdapter(list, it) } }
         })
         vm.getComics()
     }
