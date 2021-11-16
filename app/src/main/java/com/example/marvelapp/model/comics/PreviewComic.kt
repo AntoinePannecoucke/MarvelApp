@@ -1,8 +1,9 @@
 package com.example.marvelapp.model.comics
 
 import com.example.marvelapp.model.common.Thumbnail
+import java.io.Serializable
 
-class PreviewComic(val id: Int, val title: String, private val description: String?, private val pageCount: Int, val thumbnail: Thumbnail) {
+class PreviewComic(val id: Int, val title: String, val description: String?, private val pageCount: Int, val thumbnail: Thumbnail, val images: List<Thumbnail>) : Serializable {
     fun getPageCount() : String {
         return "$pageCount pages"
     }

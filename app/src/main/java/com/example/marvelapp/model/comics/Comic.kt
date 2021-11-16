@@ -8,6 +8,7 @@ import com.example.marvelapp.model.common.type.MarvelDate
 import com.example.marvelapp.model.common.type.Language
 import com.example.marvelapp.model.common.type.Price
 import com.example.marvelapp.model.common.type.MarvelURL
+import java.io.Serializable
 
 
 data class Comic(
@@ -40,4 +41,4 @@ data class Comic(
     @SerializedName("characters") val characters: ListSamples,
     @SerializedName("stories") val stories: ListSamples,
     @SerializedName("events") val events: ListSamples
-)
+) : Serializable

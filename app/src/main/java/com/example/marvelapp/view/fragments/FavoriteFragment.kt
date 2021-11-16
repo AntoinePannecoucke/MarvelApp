@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvelapp.R
 import com.example.marvelapp.view.adapters.ComicsAdapter
-import com.example.marvelapp.view.adapters.FavoriteAdapter
-import com.example.marvelapp.viewmodel.ComicsViewModel
 import com.example.marvelapp.viewmodel.FavoriteComicsViewModel
 
 class FavoriteFragment : Fragment() {
@@ -33,7 +31,7 @@ class FavoriteFragment : Fragment() {
             this.layoutManager = LinearLayoutManager(activity)
         }
         vm.getFav().observe(viewLifecycleOwner, { data ->
-            recycler_view.adapter = context?.let { data?.let { list -> FavoriteAdapter(list, it) } }
+            recycler_view.adapter = context?.let { data?.let { list -> ComicsAdapter(vm, list, it) } }
         })
         vm.getFav()
     }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.marvelapp.logic.manager.SharedPreferencesManager
 import com.example.marvelapp.model.comics.Comic
 import com.example.marvelapp.model.comics.PreviewComic
+import okhttp3.internal.notify
 import java.util.*
 
 class FavoriteComicsViewModel(private val context: Context) : ViewModel() {
@@ -17,12 +18,11 @@ class FavoriteComicsViewModel(private val context: Context) : ViewModel() {
         val result = manager.getAll()
         val list = List(result.size) { index ->
             val item = result[index]
-            PreviewComic(item.id, item.title, item.description, item.pageCount, item.thumbnail)
+            PreviewComic(item.id, item.title, item.description, item.pageCount, item.thumbnail, item.images)
         }
         favorites.postValue(list)
 
         return favorites
     }
-
     
 }

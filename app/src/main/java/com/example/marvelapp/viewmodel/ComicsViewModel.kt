@@ -25,7 +25,7 @@ class ComicsViewModel : ViewModel() {
             if (result != null){
                 val list = List<PreviewComic>(result.size) { index ->
                     val item = result[index]
-                    PreviewComic(item.id, item.title, item.description, item.pageCount, item.thumbnail)
+                    PreviewComic(item.id, item.title, item.description, item.pageCount, item.thumbnail, item.images)
                 }
                 comics.postValue(list)
             }

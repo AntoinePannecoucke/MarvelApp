@@ -1,7 +1,8 @@
 package com.example.marvelapp.view.adapters
 
 import android.content.Context
-import android.content.SharedPreferences
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,17 +10,20 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
+import com.example.marvelapp.view.ComicDetailsActivity
 import com.example.marvelapp.R
 import com.example.marvelapp.logic.manager.SharedPreferencesManager
 import com.example.marvelapp.model.comics.Comic
 import com.example.marvelapp.model.comics.PreviewComic
 import com.example.marvelapp.repository.ComicRepository
-import com.example.marvelapp.viewmodel.ComicsViewModel
-import com.jakewharton.picasso.OkHttp3Downloader
+import com.example.marvelapp.viewmodel.FavoriteComicsViewModel
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 
-class ComicsAdapter(val arrayList: List<PreviewComic>, val context: Context): RecyclerView.Adapter<ComicsAdapter.ComicsViewHolder>() {
+class ComicsAdapter(val vm : ViewModel,val arrayList: List<PreviewComic>, val context: Context): RecyclerView.Adapter<ComicsAdapter.ComicsViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -30,6 +34,12 @@ class ComicsAdapter(val arrayList: List<PreviewComic>, val context: Context): Re
 
     override fun onBindViewHolder(holder: ComicsAdapter.ComicsViewHolder, position: Int) {
         holder.bind(arrayList[position])
+        holder.itemView.setOnClickListener {
+            val comic = arrayList[position]
+            val intent = Intent(context, ComicDetailsActivity::class.java)
+            intent.putExtra("comic", comic)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -52,11 +62,17 @@ class ComicsAdapter(val arrayList: List<PreviewComic>, val context: Context): Re
             description.text = comic.getSmallDesc()
             pagesCount.text = comic.getPageCount()
 
-            val builder = Picasso.Builder(context)
-            builder.downloader(OkHttp3Downloader(context))
+            Picasso.with(context).load("${comic.thumbnail.path}.${comic.thumbnail.extension}")
+                .placeholder(R.drawable.ic_comic)
+                .error(R.drawable.ic_image_error)
+                .into(thumbnail)
 
             var manager = SharedPreferencesManager.getInstance(context)
             val id = "${comic.id}"
+            if (vm is FavoriteComicsViewModel){
+                comicFavBtn.isVisible = false
+                comicFavBtn.isEnabled = false
+            }
             comicFavBtn.setOnClickListener {
                 if (manager.isFav(id)){
                     manager.remove(id)
@@ -72,6 +88,8 @@ class ComicsAdapter(val arrayList: List<PreviewComic>, val context: Context): Re
                 }
             }
 
+
+
             if (manager.isFav(id)){
                 comicFavBtn.setImageResource(R.drawable.ic_star)
             }
@@ -79,10 +97,6 @@ class ComicsAdapter(val arrayList: List<PreviewComic>, val context: Context): Re
                 comicFavBtn.setImageResource(R.drawable.ic_outline_star)
             }
 
-            builder.build().load("${comic.thumbnail.path}.${comic.thumbnail.extension}")
-                .placeholder(R.drawable.ic_comic)
-                .error(R.drawable.ic_image_error)
-                .into(thumbnail)
         }
 
     }
