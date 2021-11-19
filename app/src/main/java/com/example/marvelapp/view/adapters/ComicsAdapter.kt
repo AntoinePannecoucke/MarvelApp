@@ -2,6 +2,7 @@ package com.example.marvelapp.view.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -76,13 +77,13 @@ class ComicsAdapter(val vm : ViewModel,val arrayList: List<PreviewComic>, val co
             comicFavBtn.setOnClickListener {
                 if (manager.isFav(id)){
                     manager.remove(id)
-                    comicFavBtn.setImageResource(R.drawable.ic_outline_star)
+                    comicFavBtn.setImageResource(R.drawable.ic_outline_bookmark_add_24)
                 }
                 else {
                     ComicRepository.comics.forEach {
                         if (it.id == comic.id){
                             manager.save(id, it)
-                            comicFavBtn.setImageResource(R.drawable.ic_star)
+                            comicFavBtn.setImageResource(R.drawable.ic_baseline_bookmark_added_24)
                         }
                     }
                 }
@@ -91,10 +92,10 @@ class ComicsAdapter(val vm : ViewModel,val arrayList: List<PreviewComic>, val co
 
 
             if (manager.isFav(id)){
-                comicFavBtn.setImageResource(R.drawable.ic_star)
+                comicFavBtn.setImageResource(R.drawable.ic_baseline_bookmark_added_24)
             }
             else {
-                comicFavBtn.setImageResource(R.drawable.ic_outline_star)
+                comicFavBtn.setImageResource(R.drawable.ic_outline_bookmark_add_24)
             }
 
         }

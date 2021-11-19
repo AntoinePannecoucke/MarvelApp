@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">MarvelApp</string>
-    <string name="comics_menu">Comics</string>
-    <string name="fav_menu">Favoris</string>
-    <string name="search_menu">Rechercher</string>
+    <string name="comics_menu">COMICS</string>
+    <string name="fav_menu">FAVORIS</string>
+    <string name="scan_menu">SCANNER</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

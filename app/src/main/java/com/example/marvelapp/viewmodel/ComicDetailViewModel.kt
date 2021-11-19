@@ -9,9 +9,9 @@ class ComicDetailViewModel(val comic:PreviewComic?) {
     fun getThumbnailsList() : List<List<Thumbnail?>> {
         val result = ArrayList<ArrayList<Thumbnail?>>()
         if (comic?.images != null) {
-            for (i in 0..comic.images.size step 3) {
+            for (i in 0..comic.images.size step 2) {
                 val tmp = ArrayList<Thumbnail?>()
-                for (j in 0..2){
+                for (j in 0..1){
                     if (i+j < comic.images.size){
                         tmp.add(comic.images[i])
                     }

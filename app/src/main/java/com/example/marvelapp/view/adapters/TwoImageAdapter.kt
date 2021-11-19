@@ -11,12 +11,11 @@ import com.example.marvelapp.R
 import com.example.marvelapp.model.common.Thumbnail
 import com.squareup.picasso.Picasso
 
-class ThreeImageAdapter(val list: List<List<Thumbnail?>>?, val context: Context ) : RecyclerView.Adapter<ThreeImageAdapter.ThreeImageViewHolder>() {
+class TwoImageAdapter(val list: List<List<Thumbnail?>>?, val context: Context ) : RecyclerView.Adapter<TwoImageAdapter.ThreeImageViewHolder>() {
 
     inner class ThreeImageViewHolder(private val binding: View) : RecyclerView.ViewHolder(binding){
         val firstImageView = binding.findViewById<ImageView>(R.id.first_image)
         val secondImageView = binding.findViewById<ImageView>(R.id.second_image)
-        val thirdImageView = binding.findViewById<ImageView>(R.id.third_image)
 
 
         fun bind(list: List<Thumbnail?>?) {
@@ -36,14 +35,6 @@ class ThreeImageAdapter(val list: List<List<Thumbnail?>>?, val context: Context 
                 }
                 else {
                     secondImageView.isVisible = false
-                }
-                if (list[2] != null){
-                    Picasso.with(context).load("${list[0]?.path}.${list[0]?.extension}")
-                        .placeholder(R.drawable.ic_image_placeholder)
-                        .into(thirdImageView)
-                }
-                else {
-                    thirdImageView.isVisible = false
                 }
             }
         }

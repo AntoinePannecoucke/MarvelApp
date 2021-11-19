@@ -3,16 +3,17 @@
 
     <item
         android:id="@+id/comic_nav_btn"
-        android:icon="@drawable/ic_comic"
+        android:icon="@drawable/ic_baseline_view_list_24"
+        android:iconTint="@color/gold"
         android:title="@string/comics_menu" />
     <item
         android:id="@+id/favorite_nav_btn"
-        android:icon="@drawable/ic_favorite"
+        android:icon="@drawable/ic_baseline_bookmarks_24"
         android:iconTint="@color/gold"
         android:title="@string/fav_menu" />
     <item
         android:id="@+id/search_nav_btn"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_baseline_qr_code_scanner_24"
         android:iconTint="@color/gold"
-        android:title="@string/search_menu" />
+        android:title="@string/scan_menu" />
 </menu>

@@ -8,9 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvelapp.R
-import com.example.marvelapp.model.comics.Comic
 import com.example.marvelapp.model.comics.PreviewComic
-import com.example.marvelapp.view.adapters.ThreeImageAdapter
+import com.example.marvelapp.view.adapters.TwoImageAdapter
 import com.example.marvelapp.viewmodel.ComicDetailViewModel
 import com.squareup.picasso.Picasso
 
@@ -25,7 +24,7 @@ class ComicDetailsActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.comic_detail_image_list).also{
             it.layoutManager = LinearLayoutManager(this)
-            it.adapter = ThreeImageAdapter(vm?.getThumbnailsList(), this)
+            it.adapter = TwoImageAdapter(vm?.getThumbnailsList(), this)
         }
 
         recyclerView?.layoutManager
