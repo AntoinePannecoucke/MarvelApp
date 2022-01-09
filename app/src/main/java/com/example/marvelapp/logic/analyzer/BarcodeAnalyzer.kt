@@ -12,6 +12,8 @@ import com.google.mlkit.vision.common.InputImage
 
 class BarcodeAnalyzer(private val listener: ScanningResultListener) : ImageAnalysis.Analyzer {
 
+    private var scanned = false
+
     @ExperimentalGetImage
     override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
@@ -24,18 +26,19 @@ class BarcodeAnalyzer(private val listener: ScanningResultListener) : ImageAnaly
 
             scanner.process(image)
                 .addOnSuccessListener { barcodes ->
-                    // Task completed successfully
-                    // ...
-
-                    barcodes.firstOrNull().let { barcode ->
-                        val rawValue = barcode?.rawValue
-                        rawValue?.let {
-                            Log.d("Barcode", it)
-                            listener.onScanned(it)
+                    if (!scanned) {
+                        scanned = true
+                        barcodes.firstOrNull().let { barcode ->
+                            val rawValue = barcode?.rawValue
+                            rawValue?.let {
+                                Log.d("Barcode", it)
+                                listener.onScanned(it)
+                            }
                         }
-                    }
 
-                    imageProxy.close()
+                        imageProxy.close()
+                        scanned = false
+                    }
                 }
                 .addOnFailureListener {
                     // Task failed with an exception

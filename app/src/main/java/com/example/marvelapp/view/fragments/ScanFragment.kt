@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Context.CAMERA_SERVICE
+import android.content.Intent
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
@@ -26,19 +27,26 @@ import androidx.lifecycle.LifecycleOwner
 import com.example.marvelapp.R
 import com.example.marvelapp.interfaces.ScanningResultListener
 import com.example.marvelapp.logic.analyzer.BarcodeAnalyzer
+import com.example.marvelapp.model.comics.PreviewComic
+import com.example.marvelapp.repository.ComicRepository
+import com.example.marvelapp.view.ComicDetailsActivity
+import com.example.marvelapp.viewmodel.ScanFragmentViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class ScanFragment : Fragment() {
-
+class ScanFragment : Fragment(), ScanningResultListener {
+    private var viewModel : ScanFragmentViewModel? = null
     private var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>? = null
     private var cameraExecutor: ExecutorService? = null
     private var previewView : PreviewView? = null
+    private var scanned = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,44 +55,10 @@ class ScanFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_scan, container, false)
     }
 
-    private val ORIENTATIONS = SparseIntArray()
-
-    init {
-        ORIENTATIONS.append(Surface.ROTATION_0, 0)
-        ORIENTATIONS.append(Surface.ROTATION_90, 90)
-        ORIENTATIONS.append(Surface.ROTATION_180, 180)
-        ORIENTATIONS.append(Surface.ROTATION_270, 270)
-    }
-
-    /**
-     * Get the angle by which an image must be rotated given the device's current
-     * orientation.
-     */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Throws(CameraAccessException::class)
-    private fun getRotationCompensation(cameraId: String, activity: Activity, isFrontFacing: Boolean): Int {
-        // Get the device's current rotation relative to its "native" orientation.
-        // Then, from the ORIENTATIONS table, look up the angle the image must be
-        // rotated to compensate for the device's rotation.
-        val deviceRotation = activity.windowManager.defaultDisplay.rotation
-        var rotationCompensation = ORIENTATIONS.get(deviceRotation)
-
-        // Get the device's sensor orientation.
-        val cameraManager = activity.getSystemService(CAMERA_SERVICE) as CameraManager
-        val sensorOrientation = cameraManager
-            .getCameraCharacteristics(cameraId)
-            .get(CameraCharacteristics.SENSOR_ORIENTATION)!!
-
-        if (isFrontFacing) {
-            rotationCompensation = (sensorOrientation + rotationCompensation) % 360
-        } else { // back-facing
-            rotationCompensation = (sensorOrientation - rotationCompensation + 360) % 360
-        }
-        return rotationCompensation
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ScanFragmentViewModel()
         previewView = view.findViewById(R.id.previewView)
         cameraExecutor = Executors.newSingleThreadExecutor()
         cameraProviderFuture = ProcessCameraProvider.getInstance(view.context)
@@ -93,6 +67,12 @@ class ScanFragment : Fragment() {
             val cameraProvider = cameraProviderFuture?.get()
             bindPreview(cameraProvider)
         }, ContextCompat.getMainExecutor(view.context))
+
+        viewModel?.comic?.observe(viewLifecycleOwner, { data ->
+            val intent = Intent(this.context, ComicDetailsActivity::class.java)
+            intent.putExtra("comic", data)
+            startActivity(intent)
+        })
 
     }
 
@@ -128,13 +108,9 @@ class ScanFragment : Fragment() {
         orientationEventListener.enable()
 
         //switch the analyzers here, i.e. MLKitBarcodeAnalyzer, ZXingBarcodeAnalyzer
-        class ScanningListener : ScanningResultListener {
-            override fun onScanned(result: String) {
-                Log.d("Scan", result)
-            }
-        }
 
-        val analyzer: ImageAnalysis.Analyzer = BarcodeAnalyzer(ScanningListener())
+
+        val analyzer: ImageAnalysis.Analyzer = BarcodeAnalyzer(this)
 
 
         imageAnalysis.setAnalyzer(cameraExecutor!!, analyzer)
@@ -150,5 +126,29 @@ class ScanFragment : Fragment() {
         super.onDestroy()
         // Shut down our background executor
         cameraExecutor?.shutdown()
+    }
+
+    override fun onScanned(result: String) {
+        if (!scanned) {
+            scanned = true
+            try {
+                viewModel?.loadScannedQRCode(result.toInt())
+                val response = runBlocking { ComicRepository.getComic(result.toInt()) }
+                val intent = Intent(this.context, ComicDetailsActivity::class.java)
+                val comic = PreviewComic(
+                    response.id,
+                    response.title,
+                    response.description,
+                    response.pageCount,
+                    response.thumbnail,
+                    response.images
+                )
+                intent.putExtra("comic", comic)
+                startActivity(intent)
+            } catch (e: TypeCastException) {
+                Log.e("QRCode", e.toString())
+            }
+            scanned = false
+        }
     }
 }
