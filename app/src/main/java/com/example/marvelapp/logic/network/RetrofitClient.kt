@@ -1,5 +1,6 @@
 package com.example.marvelapp.logic.network
 
+import com.example.marvelapp.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -8,7 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL: String = "http://gateway.marvel.com"
+    private const val BASE_URL: String = BuildConfig.base_URL
 
     private val gson: Gson by lazy {
         GsonBuilder().setLenient().create()

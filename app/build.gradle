@@ -41,6 +41,48 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    flavorDimensions "environment"
+    productFlavors{
+        development {
+            dimension "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix '-dev'
+            ext {
+                baseURL = "https://gateway.marvel.com:443/v1/public/"
+            }
+        }
+
+        errorMock {
+            dimension "environment"
+            applicationIdSuffix = ".error"
+            versionNameSuffix '-error'
+            ext {
+                baseURL = "https://4cff91d8-d70b-4a72-ab9e-d33eeb905fb6.mock.pstmn.io"
+            }
+        }
+
+        successMock {
+            dimension "environment"
+            applicationIdSuffix = ".success"
+            versionNameSuffix '-success'
+            ext {
+                baseURL = "https://b1a25709-784f-44c5-848b-63b6272a9cbc.mock.pstmn.io"
+            }
+        }
+
+
+        applicationVariants.all { variant ->
+
+            def dimensions = variant.productFlavors
+            def environment = dimensions[0]
+
+            def BASE_URL = environment.ext.baseURL
+            variant.buildConfigField "String", "base_URL", "\"$BASE_URL\""
+
+        }
+    }
+
 }
 
 dependencies {

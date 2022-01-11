@@ -134,17 +134,20 @@ class ScanFragment : Fragment(), ScanningResultListener {
             try {
                 viewModel?.loadScannedQRCode(result.toInt())
                 val response = runBlocking { ComicRepository.getComic(result.toInt()) }
-                val intent = Intent(this.context, ComicDetailsActivity::class.java)
-                val comic = PreviewComic(
-                    response.id,
-                    response.title,
-                    response.description,
-                    response.pageCount,
-                    response.thumbnail,
-                    response.images
-                )
-                intent.putExtra("comic", comic)
-                startActivity(intent)
+                response?.let {
+                    val intent = Intent(this.context, ComicDetailsActivity::class.java)
+
+                    val comic = PreviewComic(
+                        response.id,
+                        response.title,
+                        response.description,
+                        response.pageCount,
+                        response.thumbnail,
+                        response.images
+                    )
+                    intent.putExtra("comic", comic)
+                    startActivity(intent)
+                }
             } catch (e: TypeCastException) {
                 Log.e("QRCode", e.toString())
             }

@@ -10,21 +10,21 @@ import retrofit2.http.Query
 interface RetrofitInterface {
 
     //Comics
-    @GET("/v1/public/comics/{id}")
+    @GET("comics/{id}")
     suspend fun getComic(
         @Path("id") id: Int,
     ): Response<ApiResponse<Comic>>
 
-    @GET("/v1/public/comics")
+    @GET("comics")
     suspend fun getAllComics(): Response<ApiResponse<Comic>>
 
 
-    @GET("/v1/public/comics")
+    @GET("comics")
     suspend fun getComicByName(
         @Query("titleStartsWith") titleStartsWith: String,
     ): Response<ApiResponse<Comic>>
 
-    @GET("/v1/public/comics/{id}/creators")
+    @GET("comics/{id}/creators")
     suspend fun getComicsCreator(
         @Path("id") id: String,
     ): Response<ApiResponse<Comic>>
