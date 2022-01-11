@@ -49,27 +49,19 @@ android {
             applicationIdSuffix = ".dev"
             versionNameSuffix '-dev'
             ext {
-                baseURL = "https://gateway.marvel.com:443/v1/public/"
+                baseURL = "https://gateway.marvel.com:443/v1/public"
             }
         }
 
-        errorMock {
+        mock {
             dimension "environment"
-            applicationIdSuffix = ".error"
-            versionNameSuffix '-error'
+            applicationIdSuffix = ".mock"
+            versionNameSuffix '-mock'
             ext {
-                baseURL = "https://4cff91d8-d70b-4a72-ab9e-d33eeb905fb6.mock.pstmn.io"
+                baseURL = "https://ae2ff6a2-b716-4268-bbbf-3aacc4f536b6.mock.pstmn.io"
             }
         }
 
-        successMock {
-            dimension "environment"
-            applicationIdSuffix = ".success"
-            versionNameSuffix '-success'
-            ext {
-                baseURL = "https://b1a25709-784f-44c5-848b-63b6272a9cbc.mock.pstmn.io"
-            }
-        }
 
 
         applicationVariants.all { variant ->
